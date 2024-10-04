@@ -52,4 +52,14 @@ export class FirebaseService {
         }
         await docRef.delete(); // Delete the document
     }
+
+    // Generic query method to get documents by field value
+    async getDocumentsByField(collectionName: string, fieldName: string, value: any): Promise<any[]> {
+        const collectionRef = db.collection(collectionName);
+        const snapshot = await collectionRef.where(fieldName, '==', value).get();
+        if (snapshot.empty) {
+            return [];
+        }
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
 }
