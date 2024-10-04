@@ -1,17 +1,49 @@
-import {Injectable} from '@nestjs/common';
-import {Target, TargetDto} from "../models/target";
-import {generateUniqueString} from "../string.utils";
+import { Injectable } from '@nestjs/common';
+import {FirebaseService} from "./firebase.serivce";
+import {TargetDto} from "../models/target";
 
 @Injectable()
 export class TargetService {
-    async createTarget(targetDto: TargetDto) {
-        const target: Target = {
-            id: generateUniqueString(),
-            ...targetDto
-        };
-        return {
-            message: 'Target created successfully',
-            target
-        }
+    private readonly collectionName = 'targets'; // Define the collection name for targets
+
+    constructor(private readonly firebaseService: FirebaseService) {}
+
+    // Create an target
+    async createTarget(targetDto: TargetDto): Promise<string> {
+        return await this.firebaseService.createDocument(this.collectionName, targetDto);
+    }
+
+    // Get an target by ID
+    async getTarget(targetId: string): Promise<any> {
+        return await this.firebaseService.getDocument(this.collectionName, targetId);
+    }
+
+    // Get all targets
+    async getAllTargets(): Promise<any[]> {
+        return await this.firebaseService.getAllDocuments(this.collectionName);
+    }
+
+    // Get targets by officeId
+    async getTargetByEmployeeId(employeeId: string): Promise<any[]> {
+        return await this.firebaseService.getDocumentsByField(this.collectionName, 'employeeId', employeeId);
+    } 
+    
+    // Get targets by officeId
+    async getTargetsByDateRange(from: string, to: string): Promise<any[]> {
+        return await this.firebaseService.getDocumentsByTwoFields(
+            this.collectionName,
+            'from', '==', from,   
+            'to', '==', to
+        );
+    }
+
+    // Update an target
+    async updateTarget(targetId: string, targetDto: any): Promise<void> {
+        return await this.firebaseService.updateDocument(this.collectionName, targetId, targetDto);
+    }
+
+    // Delete an target
+    async deleteTarget(targetId: string): Promise<void> {
+        return await this.firebaseService.deleteDocument(this.collectionName, targetId);
     }
 }

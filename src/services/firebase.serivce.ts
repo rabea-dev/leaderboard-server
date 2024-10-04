@@ -62,4 +62,27 @@ export class FirebaseService {
         }
         return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     }
+
+    // Query documents by two fields (e.g., from and to dates)
+    async getDocumentsByTwoFields(
+        collectionName: string,
+        field1: string,
+        operator1: FirebaseFirestore.WhereFilterOp,
+        value1: any,
+        field2: string,
+        operator2: FirebaseFirestore.WhereFilterOp,
+        value2: any,
+    ): Promise<any[]> {
+        const collectionRef = db.collection(collectionName);
+        const snapshot = await collectionRef
+            .where(field1, operator1, value1) // Query by the first field (e.g., 'from' >= value1)
+            .where(field2, operator2, value2) // Query by the second field (e.g., 'to' <= value2)
+            .get();
+
+        if (snapshot.empty) {
+            return []; // Return an empty array if no documents are found
+        }
+
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
 }
