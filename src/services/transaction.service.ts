@@ -9,7 +9,7 @@ export class TransactionService {
     constructor(private readonly firebaseService: FirebaseService) {}
 
     // Create an transaction
-    async createTransaction(transactionDto: TransactionDto): Promise<string> {
+    async createTransaction(transactionDto: TransactionDto): Promise<{id: string}> {
         return await this.firebaseService.createDocument(this.collectionName, transactionDto);
     }
 

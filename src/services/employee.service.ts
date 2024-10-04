@@ -9,7 +9,7 @@ export class EmployeeService {
     constructor(private readonly firebaseService: FirebaseService) {}
 
     // Create an employee
-    async createEmployee(employeeDto: EmployeeDto): Promise<string> {
+    async createEmployee(employeeDto: EmployeeDto): Promise<{id: string}> {
         return await this.firebaseService.createDocument(this.collectionName, employeeDto);
     }
 

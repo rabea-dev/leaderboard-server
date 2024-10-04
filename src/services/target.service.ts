@@ -9,7 +9,7 @@ export class TargetService {
     constructor(private readonly firebaseService: FirebaseService) {}
 
     // Create an target
-    async createTarget(targetDto: TargetDto): Promise<string> {
+    async createTarget(targetDto: TargetDto): Promise<{id: string}> {
         return await this.firebaseService.createDocument(this.collectionName, targetDto);
     }
 

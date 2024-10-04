@@ -4,10 +4,10 @@ import { db } from '../firebase-config'; // Import the initialized Firebase Fire
 @Injectable()
 export class FirebaseService {
     // Create a new document in a collection
-    async createDocument(collectionName: string, data: any): Promise<string> {
+    async createDocument(collectionName: string, data: any): Promise<{id: string}> {
         const docRef = db.collection(collectionName).doc(); // Create a new document reference
         await docRef.set(data); // Set the document data in Firestore
-        return docRef.id; // Return the document ID
+        return {id: docRef.id}; // Return the document ID
     }
 
     // Get a document by ID from a collection
