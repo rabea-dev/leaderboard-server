@@ -1,17 +1,44 @@
-import {Injectable} from '@nestjs/common';
-import {Transaction, TransactionDto} from "../models/transaction";
-import {generateUniqueString} from "../string.utils";
+import { Injectable } from '@nestjs/common';
+import {FirebaseService} from "./firebase.serivce";
+import {TransactionDto} from "../models/transaction";
 
 @Injectable()
 export class TransactionService {
-    async createTransaction(transactionDto: TransactionDto) {
-        const transaction: Transaction = {
-            id: generateUniqueString(),
-            ...transactionDto
-        };
-        return {
-            message: 'Transaction created successfully',
-            transaction
-        }
+    private readonly collectionName = 'transactions'; // Define the collection name for transactions
+
+    constructor(private readonly firebaseService: FirebaseService) {}
+
+    // Create an transaction
+    async createTransaction(transactionDto: TransactionDto): Promise<string> {
+        return await this.firebaseService.createDocument(this.collectionName, transactionDto);
+    }
+
+    // Get an transaction by ID
+    async getTransaction(transactionId: string): Promise<any> {
+        return await this.firebaseService.getDocument(this.collectionName, transactionId);
+    }
+
+    // Get all transactions
+    async getAllTransactions(): Promise<any[]> {
+        return await this.firebaseService.getAllDocuments(this.collectionName);
+    }
+
+    async getTransactionByEmployeeId(employeeId: string): Promise<any[]> {
+        return await this.firebaseService.getDocumentsByField(this.collectionName, 'employeeId', employeeId);
+    }
+
+    async getTransactionsByDateRange(date: string): Promise<any[]> {
+        return await this.firebaseService.getDocumentsByField(this.collectionName, 'date', date);
+
+    }
+
+    // Update an transaction
+    async updateTransaction(transactionId: string, transactionDto: any): Promise<void> {
+        return await this.firebaseService.updateDocument(this.collectionName, transactionId, transactionDto);
+    }
+
+    // Delete an transaction
+    async deleteTransaction(transactionId: string): Promise<void> {
+        return await this.firebaseService.deleteDocument(this.collectionName, transactionId);
     }
 }
