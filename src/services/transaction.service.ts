@@ -41,4 +41,9 @@ export class TransactionService {
     async deleteTransaction(transactionId: string): Promise<void> {
         return await this.firebaseService.deleteDocument(this.collectionName, transactionId);
     }
+
+    async getTransactionByOffice(officeId: string): Promise<any[]> {
+        return await this.firebaseService.getDocumentsByField(this.collectionName, 'officeId', officeId);
+    }
+
 }

@@ -15,6 +15,14 @@ export class TransactionController {
     return await this.transactionService.getTransaction(id);
   }
 
+  @Get()
+  async getTransactions(@Query('officeId') officeId?: string) {
+    if (officeId) {
+      return await this.transactionService.getTransactionByOffice(officeId); // Filter by officeId if query param is provided
+    }
+    return await this.transactionService.getAllTransactions(); // Return all employees if no query param is provided
+  }
+
   @Get('exact-date-range')
   async getTargetByExactDateRange(@Query('date') date: string) {
     return await this.transactionService.getTransactionsByDateRange(date);
