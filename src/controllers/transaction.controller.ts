@@ -10,6 +10,11 @@ export class TransactionController {
   async createTarget(@Body() transactionDto: TransactionDto) {
     return await this.transactionService.createTransaction(transactionDto);
   }
+
+  @Get('exact-date-range')
+  async getTargetByExactDateRange(@Query('date') date: string,@Query('officeId') officeId: string) {
+    return await this.transactionService.getTransactionsByDateRange(date,officeId);
+  }
   @Get(':id')
   async getTransaction(@Param('id') id: string) {
     return await this.transactionService.getTransaction(id);
@@ -22,12 +27,7 @@ export class TransactionController {
     }
     return await this.transactionService.getAllTransactions(); // Return all employees if no query param is provided
   }
-
-  @Get('exact-date-range')
-  async getTargetByExactDateRange(@Query('date') date: string) {
-    return await this.transactionService.getTransactionsByDateRange(date);
-  }
-
+  
   @Put(':id')
   async updateTarget(@Param('id') id: string, @Body() transactionDto: TransactionDto) {
     await this.transactionService.updateTransaction(id, transactionDto);

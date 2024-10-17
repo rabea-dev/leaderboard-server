@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {bucket, db} from '../firebase-config'; // Import the initialized Firebase Firestore instance
-import { v4 as uuidv4 } from 'uuid';  // To generate unique filenames
+import {v4 as uuidv4} from 'uuid';  // To generate unique filenames
 
 @Injectable()
 export class FirebaseService {
     // Create a new document in a collection
-    async createDocument(collectionName: string, data: any): Promise<{id: string}> {
+    async createDocument(collectionName: string, data: any): Promise<{ id: string }> {
         const docRef = db.collection(collectionName).doc(); // Create a new document reference
         await docRef.set(data); // Set the document data in Firestore
         return {id: docRef.id}; // Return the document ID
@@ -30,7 +30,7 @@ export class FirebaseService {
         }
 
         // Map over the documents and return their data
-        const documents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const documents = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
         return documents;
     }
 
@@ -61,11 +61,11 @@ export class FirebaseService {
         if (snapshot.empty) {
             return [];
         }
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
     }
 
     // Query documents by two fields (e.g., from and to dates)
-    async getDocumentsByTwoFields(
+    async getDocumentsByMultipleFields(
         collectionName: string,
         field1: string,
         operator1: FirebaseFirestore.WhereFilterOp,
@@ -73,18 +73,30 @@ export class FirebaseService {
         field2: string,
         operator2: FirebaseFirestore.WhereFilterOp,
         value2: any,
+        field3?: string,
+        operator3?: FirebaseFirestore.WhereFilterOp,
+        value3?: any
     ): Promise<any[]> {
         const collectionRef = db.collection(collectionName);
-        const snapshot = await collectionRef
-            .where(field1, operator1, value1) // Query by the first field (e.g., 'from' >= value1)
-            .where(field2, operator2, value2) // Query by the second field (e.g., 'to' <= value2)
-            .get();
-
+        let snapshot;
+        if (field3 && operator3 && value3) {
+            snapshot = await collectionRef
+                .where(field1, operator1, value1)
+                .where(field2, operator2, value2)
+                .where(field3, operator3, value3)
+                .get();
+        } else {
+            snapshot = await collectionRef
+                .where(field1, operator1, value1)
+                .where(field2, operator2, value2)
+                .get();
+        }
+        
         if (snapshot.empty) {
             return []; // Return an empty array if no documents are found
         }
 
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
     }
 
     async uploadFile(file: Express.Multer.File): Promise<string> {

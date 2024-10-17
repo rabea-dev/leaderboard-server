@@ -10,16 +10,16 @@ export class TargetController {
   async createTarget(@Body() targetDto: TargetDto) {
     return await this.targetService.createTarget(targetDto);
   }
+
+  @Get('exact-date-range')
+  async getTargetByExactDateRange(@Query('from') from: string, @Query('to') to: string, @Query('officeId') officeId: string) {
+    return await this.targetService.getTargetsByDateRange(from, to, officeId);
+  }
   @Get(':id')
   async getTarget(@Param('id') id: string) {
     return await this.targetService.getTarget(id);
   }
-
-  @Get('exact-date-range')
-  async getTargetByExactDateRange(@Query('from') from: string, @Query('to') to: string) {
-    return await this.targetService.getTargetsByDateRange(from, to);
-  }
-
+  
   @Put(':id')
   async updateTarget(@Param('id') id: string, @Body() targetDto: TargetDto) {
     await this.targetService.updateTarget(id, targetDto);

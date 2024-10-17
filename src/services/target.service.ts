@@ -29,8 +29,8 @@ export class TargetService {
     } 
     
     // Get targets by officeId
-    async getTargetsByDateRange(from: string, to: string): Promise<any[]> {
-        return await this.firebaseService.getDocumentsByTwoFields(
+    async getTargetsByDateRange(from: string, to: string, officeId: string): Promise<any[]> {
+        return await this.firebaseService.getDocumentsByMultipleFields(
             this.collectionName,
             'from', '==', from,   
             'to', '==', to

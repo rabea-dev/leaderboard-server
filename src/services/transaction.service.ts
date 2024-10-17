@@ -26,10 +26,13 @@ export class TransactionService {
     async getTransactionByEmployeeId(employeeId: string): Promise<any[]> {
         return await this.firebaseService.getDocumentsByField(this.collectionName, 'employeeId', employeeId);
     }
-
-    async getTransactionsByDateRange(date: string): Promise<any[]> {
-        return await this.firebaseService.getDocumentsByField(this.collectionName, 'date', date);
-
+    
+    async getTransactionsByDateRange(date: string, officeId: string): Promise<any[]> {
+        return await this.firebaseService.getDocumentsByMultipleFields(
+            this.collectionName,
+            'date', '==', date,
+            'officeId', '==', officeId
+        );
     }
 
     // Update an transaction
