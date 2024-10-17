@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { db } from '../firebase-config'; // Import the initialized Firebase Firestore instance
+import {bucket, db} from '../firebase-config'; // Import the initialized Firebase Firestore instance
+import { v4 as uuidv4 } from 'uuid';  // To generate unique filenames
 
 @Injectable()
 export class FirebaseService {
@@ -84,5 +85,21 @@ export class FirebaseService {
         }
 
         return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
+
+    async uploadFile(file: Express.Multer.File): Promise<string> {
+        const fileName = `${uuidv4()}_${file.originalname}`;  // Generate a unique file name
+        const fileUpload = bucket.file(fileName);  // Create a reference to the storage location
+
+        // Upload the file to Firebase Storage
+        await fileUpload.save(file.buffer, {
+            metadata: {
+                contentType: file.mimetype,  // Ensure the correct MIME type
+            },
+        });
+
+        // Make the file publicly accessible and return its URL
+        await fileUpload.makePublic();
+        return fileUpload.publicUrl();
     }
 }

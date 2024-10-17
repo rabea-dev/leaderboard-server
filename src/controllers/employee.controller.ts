@@ -1,15 +1,27 @@
-import {Controller, Get, Param, Post, Body, Put, Delete, Query} from '@nestjs/common';
+import {Controller, Get, Param, Post, Body, Put, Delete, Query, UploadedFile, UseInterceptors} from '@nestjs/common';
 import { EmployeeService } from '../services/employee.service';
-import {EmployeeDto} from "../models/employee"; // Import EmployeeService
+import {EmployeeDto} from "../models/employee";
+import {FileInterceptor} from "@nestjs/platform-express"; // Import EmployeeService
 
 @Controller('employee')
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
   // Create an employee
+  // @Post()
+  // async createEmployee(@Body() employeeDto: EmployeeDto) {
+  //   return await this.employeeService.createEmployee(employeeDto);
+  // }
+
+  // Create an employee with an image (file upload support)
   @Post()
-  async createEmployee(@Body() employeeDto: EmployeeDto) {
-    return await this.employeeService.createEmployee(employeeDto);
+  @UseInterceptors(FileInterceptor('employeeImage')) // Intercepts 'employeeImage' field from FormData
+  async createEmployee(
+      @UploadedFile() file: Express.Multer.File,      // Handle the image file
+      @Body() employeeDto: EmployeeDto                // Handle the form data as EmployeeDto
+  ) {
+    const imageUrl = file ? await this.employeeService.uploadEmployeeImage(file) : null;
+    return await this.employeeService.createEmployeeWithImage(employeeDto, imageUrl);
   }
 
   // Get an employee by ID

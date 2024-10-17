@@ -7,7 +7,18 @@ export class EmployeeService {
     private readonly collectionName = 'employees'; // Define the collection name for employees
 
     constructor(private readonly firebaseService: FirebaseService) {}
+    async uploadEmployeeImage(file: Express.Multer.File): Promise<string> {
+        return await this.firebaseService.uploadFile(file);  // Upload image to Firebase and return the URL
+    }
 
+    // Create an employee with an image URL
+    async createEmployeeWithImage(employeeDto: EmployeeDto, imageUrl: string): Promise<{ id: string }> {
+        const employeeData = { ...employeeDto, imageUrl };  // Combine employee data with image URL
+        return await this.firebaseService.createDocument(this.collectionName, employeeData);
+    }
+    
+    
+    
     // Create an employee
     async createEmployee(employeeDto: EmployeeDto): Promise<{id: string}> {
         return await this.firebaseService.createDocument(this.collectionName, employeeDto);
