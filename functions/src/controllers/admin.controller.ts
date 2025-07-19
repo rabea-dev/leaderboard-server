@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, Post, Put, Delete } from '@nestjs/common';
-import {FirebaseService} from "../services/firebase.serivce";
+import {FirebaseService} from "../services/firebase.service";
 import {AdminDto} from "../models/admin";
 
 @Controller('admin')
 export class AdminController {
-  constructor(private readonly firebaseService: FirebaseService) {}
+  constructor(private readonly firebaseService: FirebaseService = new FirebaseService()) {}
 
   // Create an admin document
   @Post()

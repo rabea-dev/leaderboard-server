@@ -1,12 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import {FirebaseService} from "./firebase.serivce";
+import {FirebaseService} from "../services/firebase.service";
 import {TransactionDto} from "../models/transaction";
 
-@Injectable()
 export class TransactionService {
     private readonly collectionName = 'transactions'; // Define the collection name for transactions
 
-    constructor(private readonly firebaseService: FirebaseService) {}
+    constructor(private readonly firebaseService: FirebaseService = new FirebaseService()) {}
 
     // Create an transaction
     async createTransaction(transactionDto: TransactionDto): Promise<{id: string}> {

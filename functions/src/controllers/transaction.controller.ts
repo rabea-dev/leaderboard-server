@@ -4,7 +4,7 @@ import {TransactionDto} from "../models/transaction";
 
 @Controller('transaction')
 export class TransactionController {
-  constructor(private readonly transactionService: TransactionService) {}
+  constructor(private readonly transactionService: TransactionService = new TransactionService()) {}
 
   @Post()
   async createTarget(@Body() transactionDto: TransactionDto) {

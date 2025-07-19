@@ -1,10 +1,14 @@
 import { Body, Controller, Get, Param, Post, Put, Delete } from '@nestjs/common';
-import {FirebaseService} from "../services/firebase.serivce";
+import {FirebaseService} from "../services/firebase.service";
 import {OfficeDto} from "../models/office";
 
 @Controller('office')
 export class OfficeController {
-  constructor(private readonly firebaseService: FirebaseService) {}
+  
+  constructor(private readonly firebaseService: FirebaseService = new FirebaseService()) {
+    console.log('✅ OfficeController initialized. FirebaseService injected:', !!firebaseService);
+
+  }
 
   // Create an office document
   @Post()

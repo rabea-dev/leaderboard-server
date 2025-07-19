@@ -1,8 +1,6 @@
-import {Injectable} from '@nestjs/common';
 import {Office, OfficeDto} from "../models/office";
 import {generateUniqueString} from "../string.utils";
 
-@Injectable()
 export class OfficeService {
     async createOffice(officeDto: OfficeDto) {
         const office: Office = {

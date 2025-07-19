@@ -4,7 +4,7 @@ import {TargetDto} from "../models/target";
 
 @Controller('target')
 export class TargetController {
-  constructor(private readonly targetService: TargetService) {}
+  constructor(private readonly targetService: TargetService = new TargetService()) {}
 
   @Post()
   async createTarget(@Body() targetDto: TargetDto) {

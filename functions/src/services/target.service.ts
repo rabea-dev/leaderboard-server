@@ -1,12 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import {FirebaseService} from "./firebase.serivce";
+import {FirebaseService} from "../services/firebase.service";
 import {TargetDto} from "../models/target";
 
-@Injectable()
 export class TargetService {
     private readonly collectionName = 'targets'; // Define the collection name for targets
 
-    constructor(private readonly firebaseService: FirebaseService) {}
+    constructor(private readonly firebaseService: FirebaseService = new FirebaseService()) {}
 
     // Create an target
     async createTarget(targetDto: TargetDto): Promise<{id: string}> {

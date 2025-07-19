@@ -1,12 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import {FirebaseService} from "./firebase.serivce";
+import {FirebaseService} from "../services/firebase.service";
 import {EmployeeDto} from "../models/employee";
 
-@Injectable()
 export class EmployeeService {
     private readonly collectionName = 'employees'; // Define the collection name for employees
 
-    constructor(private readonly firebaseService: FirebaseService) {}
+    constructor(private readonly firebaseService: FirebaseService = new FirebaseService()) {}
     async uploadEmployeeImage(file: Express.Multer.File): Promise<string> {
         return await this.firebaseService.uploadFile(file);  // Upload image to Firebase and return the URL
     }

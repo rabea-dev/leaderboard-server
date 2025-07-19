@@ -1,8 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { db } from '../firebase-config';
 import {AdminDto} from "../models/admin"; // Your Firebase config
 
-@Injectable()
 export class AdminService {
     // Create an admin document in the "admins" collection
     async createAdmin(adminDto: AdminDto): Promise<string> {

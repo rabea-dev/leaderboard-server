@@ -5,7 +5,7 @@ import {FileInterceptor} from "@nestjs/platform-express"; // Import EmployeeServ
 
 @Controller('employee')
 export class EmployeeController {
-  constructor(private readonly employeeService: EmployeeService) {}
+  constructor(private readonly employeeService: EmployeeService = new EmployeeService()) {}
 
   // Create an employee
   // @Post()
@@ -21,7 +21,7 @@ export class EmployeeController {
       @Body() employeeDto: EmployeeDto                // Handle the form data as EmployeeDto
   ) {
     const imageUrl = file ? await this.employeeService.uploadEmployeeImage(file) : null;
-    return await this.employeeService.createEmployeeWithImage(employeeDto, imageUrl);
+    return await this.employeeService.createEmployeeWithImage(employeeDto, imageUrl as string);
   }
 
   // Get an employee by ID
