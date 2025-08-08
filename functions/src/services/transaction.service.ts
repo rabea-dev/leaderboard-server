@@ -25,11 +25,19 @@ export class TransactionService {
         return await this.firebaseService.getDocumentsByField(this.collectionName, 'employeeId', employeeId);
     }
     
-    async getTransactionsByDateRange(date: string, officeId: string): Promise<any[]> {
+    async getTransactionsByExactDate(date: string, officeId: string): Promise<any[]> {
         return await this.firebaseService.getDocumentsByMultipleFields(
             this.collectionName,
             'date', '==', date,
             'officeId', '==', officeId
+        );
+    }
+
+    async getTransactionsByMonth(monthKey: string, officeId: string): Promise<any[]> {
+        return await this.firebaseService.getDocumentsByMultipleFields(
+            this.collectionName,
+            'monthKey', '==', monthKey,
+            'officeId', '==', officeId,
         );
     }
 

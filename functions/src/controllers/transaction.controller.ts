@@ -7,14 +7,21 @@ export class TransactionController {
   constructor(private readonly transactionService: TransactionService = new TransactionService()) {}
 
   @Post()
-  async createTarget(@Body() transactionDto: TransactionDto) {
+  async createTransaction(@Body() transactionDto: TransactionDto) {
     return await this.transactionService.createTransaction(transactionDto);
   }
 
-  @Get('exact-date-range')
-  async getTargetByExactDateRange(@Query('date') date: string,@Query('officeId') officeId: string) {
-    return await this.transactionService.getTransactionsByDateRange(date,officeId);
+  @Get('exact-month')
+  async getTransactionByExactDateRange(@Query('month') month: string, @Query('officeId') officeId: string) {
+    return await this.transactionService.getTransactionsByMonth(month, officeId);
   }
+
+  @Get('exact-date-range')
+  async getTransactionsByExactDate(@Query('date') date: string,@Query('officeId') officeId: string) {
+    return await this.transactionService.getTransactionsByExactDate(date,officeId);
+  }
+
+
   @Get(':id')
   async getTransaction(@Param('id') id: string) {
     return await this.transactionService.getTransaction(id);
@@ -29,13 +36,13 @@ export class TransactionController {
   }
   
   @Put(':id')
-  async updateTarget(@Param('id') id: string, @Body() transactionDto: TransactionDto) {
+  async updateTransaction(@Param('id') id: string, @Body() transactionDto: TransactionDto) {
     await this.transactionService.updateTransaction(id, transactionDto);
-    return { message: `Target with ID ${id} has been updated` };
+    return { message: `Transaction with ID ${id} has been updated` };
   }
 
   @Delete(':id')
-  async deleteTarget(@Param('id') id: string) {
+  async deleteTransaction(@Param('id') id: string) {
     await this.transactionService.deleteTransaction(id);
     return { message: `Transaction with ID ${id} has been deleted` };
   }
