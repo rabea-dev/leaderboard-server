@@ -33,12 +33,15 @@ export class TransactionService {
         );
     }
 
-    async getTransactionsByMonth(monthKey: string, officeId: string): Promise<any[]> {
-        return await this.firebaseService.getDocumentsByMultipleFields(
-            this.collectionName,
-            'monthKey', '==', monthKey,
-            'officeId', '==', officeId,
-        );
+    async getTransactionsByMonth(monthKey: string, officeId?: string): Promise<any[]> {
+        if(officeId){
+            return await this.firebaseService.getDocumentsByMultipleFields(
+                this.collectionName,
+                'monthKey', '==', monthKey,
+                'officeId', '==', officeId,
+            );
+        } 
+        return await this.firebaseService.getDocumentsByField(this.collectionName, 'monthKey', monthKey);
     }
 
     // Update an transaction

@@ -13,6 +13,9 @@ export class TransactionController {
 
   @Get('exact-month')
   async getTransactionByExactDateRange(@Query('month') month: string, @Query('officeId') officeId: string) {
+      if(!officeId){
+          return await this.transactionService.getTransactionsByMonth(month);
+      }
     return await this.transactionService.getTransactionsByMonth(month, officeId);
   }
 
