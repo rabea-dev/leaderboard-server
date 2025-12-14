@@ -47,6 +47,20 @@ export class EmployeeController {
     return { message: `Employee with ID ${id} has been updated` };
   }
 
+  // Deactivate an employee by ID
+  @Put(':id/deactivate')
+  async deactivateEmployee(@Param('id') id: string) {
+    await this.employeeService.updateEmployee(id, { isDeactivated: true } as EmployeeDto);
+    return { message: `Employee with ID ${id} has been deactivated` };
+  }
+
+  // Reactivate an employee by ID
+  @Put(':id/reactivate')
+  async reactivateEmployee(@Param('id') id: string) {
+    await this.employeeService.updateEmployee(id, { isDeactivated: false } as EmployeeDto);
+    return { message: `Employee with ID ${id} has been reactivated` };
+  }
+
   // Delete an employee by ID
   @Delete(':id')
   async deleteEmployee(@Param('id') id: string) {
